@@ -18,3 +18,36 @@ class FlowFile(models.Model):
     
     def __str__(self):
         return f"{self.filename} ({self.file_date})"
+
+
+class MeterPoint(models.Model):
+    """
+    Represents a Meter Point Administration Number (MPAN).
+    The unique identifier for an electricity supply point.
+    """
+    METER_TYPE_CHOICES = [
+        ('domestic', 'Domestic'),
+        ('commercial', 'Commercial'),
+        ('industrial', 'Industrial'),
+    ]
+    
+    mpan = models.CharField(
+        max_length=13,
+        unique=True,
+        db_index=True,
+        help_text="13-digit Meter Point Administration Number"
+    )
+    meter_type = models.CharField(
+        max_length=20,
+        choices=METER_TYPE_CHOICES,
+        default='domestic'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name = "Meter Point"
+        verbose_name_plural = "Meter Points"
+        ordering = ['mpan']
+    
+    def __str__(self):
+        return self.mpan
