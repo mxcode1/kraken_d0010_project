@@ -1,0 +1,14 @@
+{% extends "admin/index.html" %}
+
+{% block sidebar %}
+{{ block.super }}
+<div class="module">
+    <table>
+        <caption>
+            <a href="{% url 'testing_dashboard' %}" class="section" title="Testing & Debug Tools">
+                🧪 Testing & Debug
+            </a>
+        </caption>
+    </table>
+</div>
+{% endblock %}
