@@ -1,0 +1,14 @@
+[run]
+source = meter_readings,config
+omit =
+    */migrations/*
+    */tests/*
+    */venv/*
+    */env/*
+    manage.py
+
+[report]
+show_missing = True
+
+[html]
+directory = htmlcov
