@@ -22,3 +22,6 @@ coverage>=7.0.0
 black>=23.0.0
 flake8>=7.0.0
 isort>=5.0.0
+
+# Environment Configuration
+python-dotenv>=1.0.0
