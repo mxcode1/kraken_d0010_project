@@ -1,48 +1,95 @@
 #!/bin/bash
-# run_demo_server.sh
-# One-command deployment for Kraken D0010
+# Quick demo server launcher with automatic setup
 
 set -e
 
-echo "🦑 Kraken D0010 - Quick Demo Server"
-echo "===================================="
+echo "[START] Kraken D0010 Demo Server Setup"
 echo ""
 
-# Create virtual environment if needed
-if [ ! -d "venv" ]; then
-    echo "Creating virtual environment..."
-    python3 -m venv venv
+# ============================================
+# AUTO-CREATE .env WITH DEMO CREDENTIALS
+# ============================================
+if [ ! -f .env ]; then
+    echo "[SETUP] Creating .env from template..."
+    cp .env.example .env
+    
+    # Populate demo credentials programmatically
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        # macOS
+        sed -i '' 's/DEMO_ADMIN_USERNAME=$/DEMO_ADMIN_USERNAME=demo_admin/' .env
+        sed -i '' 's/DEMO_ADMIN_PASSWORD=$/DEMO_ADMIN_PASSWORD=KrakenDemo123!/' .env
+    else
+        # Linux
+        sed -i 's/DEMO_ADMIN_USERNAME=$/DEMO_ADMIN_USERNAME=demo_admin/' .env
+        sed -i 's/DEMO_ADMIN_PASSWORD=$/DEMO_ADMIN_PASSWORD=KrakenDemo123!/' .env
+    fi
+    
+    echo "[OK] .env created with demo credentials"
+    echo "     Username: demo_admin"
+    echo "     Password: KrakenDemo123!"
+else
+    echo "[OK] Using existing .env configuration"
 fi
 
-# Activate
+echo ""
+
+# Load environment variables
+if [ -f .env ]; then
+    export $(grep -v '^#' .env | grep -v '^$' | xargs)
+fi
+
+# ============================================
+# VIRTUAL ENVIRONMENT
+# ============================================
+if [ ! -d "venv" ]; then
+    echo "[CREATE] Virtual environment..."
+    python3 -m venv venv
+    echo "[OK] Virtual environment created"
+fi
+
+echo "[INSTALL] Activating environment and installing dependencies..."
 source venv/bin/activate
-
-# Install dependencies
-echo "Installing dependencies..."
-pip install -q --upgrade pip
 pip install -q -r requirements.txt
+echo "[OK] Dependencies installed"
+echo ""
 
-# Run migrations
-echo "Setting up database..."
-python manage.py migrate --no-input
+# ============================================
+# DATABASE SETUP
+# ============================================
+echo "[SETUP] Database migrations..."
+python manage.py migrate --noinput
+echo "[OK] Database ready"
+echo ""
 
-# Create demo admin if doesn't exist
-echo "Creating demo admin user..."
+# ============================================
+# DEMO ADMIN USER
+# ============================================
+USERNAME=${DEMO_ADMIN_USERNAME:-demo_admin}
+PASSWORD=${DEMO_ADMIN_PASSWORD:-KrakenDemo123!}
+
 python manage.py shell << PYEOF
 from django.contrib.auth import get_user_model
 User = get_user_model()
-if not User.objects.filter(username='demo_admin').exists():
-    User.objects.create_superuser('demo_admin', 'demo@kraken.test', 'KrakenDemo123!')
-    print("Demo admin created: demo_admin / KrakenDemo123!")
+if not User.objects.filter(username='$USERNAME').exists():
+    User.objects.create_superuser('$USERNAME', 'admin@example.com', '$PASSWORD')
+    print("[OK] Demo admin created: $USERNAME")
 else:
-    print("Demo admin already exists")
+    print("[OK] Demo admin exists: $USERNAME")
 PYEOF
 
-# Start server
 echo ""
-echo "✅ Starting development server..."
-echo "   http://127.0.0.1:8001/admin/"
-echo "   Username: demo_admin"
-echo "   Password: KrakenDemo123!"
+
+# ============================================
+# START SERVER
+# ============================================
+PORT=${SERVER_PORT:-8001}
+
+echo "[COMPLETE] Setup finished!"
 echo ""
-python manage.py runserver 8001
+echo "Starting server on http://127.0.0.1:$PORT"
+echo "Login: $USERNAME / $PASSWORD"
+echo ""
+echo "Press Ctrl+C to stop"
+echo ""
+
+python manage.py runserver $PORT
