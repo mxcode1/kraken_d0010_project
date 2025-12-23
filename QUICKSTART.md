@@ -31,6 +31,8 @@ python manage.py runserver 8001
 - **Admin:** http://127.0.0.1:8001/admin/
 - **Testing Dashboard:** http://127.0.0.1:8001/admin/testing/
 
+**Note:** Port 8001 is used to avoid conflicts with other development servers.
+
 ## Quick Test
 
 ### Via Testing Dashboard (Recommended)
@@ -38,7 +40,8 @@ python manage.py runserver 8001
 1. Login to admin (demo_admin / KrakenDemo123!)
 2. Click "🧪 Testing & Debug" in sidebar
 3. Click "Import All Sample Files"
-4. View imported data in admin
+4. Verify statistics (should show 18+ readings)
+5. Ready for demo!
 
 ### Via Command Line
 
@@ -52,8 +55,8 @@ python manage.py import_d0010 sample_data/test_file.uff --dry-run
 
 ## What's Next?
 
-- See [documentation/FUNCTIONAL_SPEC.md](documentation/FUNCTIONAL_SPEC.md) for complete feature documentation
-- See [documentation/TESTING_GUIDE.md](documentation/TESTING_GUIDE.md) for testing dashboard details
+- See [FUNCTIONAL_SPEC.md](documentation/FUNCTIONAL_SPEC.md) for complete feature documentation
+- See [TESTING_GUIDE.md](documentation/TESTING_GUIDE.md) for testing dashboard details
 - See [README.md](README.md) for architecture overview
 
 ---

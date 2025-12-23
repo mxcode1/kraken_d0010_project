@@ -54,7 +54,7 @@ python manage.py import_d0010 sample_data/sample_d0010.uff
 
 ### 4. Start Server
 ```bash
-python manage.py runserver 8001
+python manage.py runserver 8001  # Port 8001 to avoid conflicts
 ```
 
 Visit `http://localhost:8001/admin/` to access the admin interface.
