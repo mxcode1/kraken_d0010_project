@@ -445,3 +445,37 @@ The following enhancements could be added to make this a production-ready system
 18. **Data Reconciliation**: Compare imported totals against expected values from source systems
 19. **Schema Validation**: Pre-validate files against D0010 schema before import
 20. **Historical Tracking**: Maintain history of reading corrections/updates
+
+## 🌐 REST API
+
+The system provides a complete REST API for programmatic access.
+
+### Quick Start
+```bash
+# Browse the API
+http://localhost:8001/api/
+
+# List all flow files
+curl http://localhost:8001/api/flow-files/
+
+# Search for a meter point
+curl http://localhost:8001/api/meter-points/?search=MPAN_NUMBER
+
+# Get readings for a specific date
+curl http://localhost:8001/api/readings/?reading_date=2025-01-15
+```
+
+### Available Endpoints
+- `/api/flow-files/` - Flow file management
+- `/api/meter-points/` - MPAN data
+- `/api/meters/` - Physical meters
+- `/api/readings/` - Meter readings
+
+See [documentation/API_DOCUMENTATION.md](documentation/API_DOCUMENTATION.md) for complete details.
+
+### Features
+- ✅ Full CRUD operations
+- ✅ Filtering and search
+- ✅ Pagination (100 items/page)
+- ✅ Browsable web interface
+- ✅ JSON/API format
