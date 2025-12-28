@@ -1,9 +1,10 @@
+from decimal import Decimal
+
 from django.test import TestCase
 from django.core.management import call_command
 from meter_readings.models import FlowFile, Reading
 from pathlib import Path
 import tempfile
-from decimal import Decimal
 
 
 class ImportCommandTest(TestCase):
